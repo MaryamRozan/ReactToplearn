@@ -1,5 +1,4 @@
 import React from 'react';
-import MianLayout from '../Layout/MainLayout';
 
 const Footer = () => {
     return (
