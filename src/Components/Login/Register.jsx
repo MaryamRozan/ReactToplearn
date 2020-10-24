@@ -69,7 +69,7 @@ const Register = () => {
 
                         <div className="input-group">
                             <span className="input-group-addon" id="password"><i className="zmdi zmdi-lock"></i></span>
-                            <input type="text" className="form-control" placeholder="رمز عبور " aria-describedby="password"
+                            <input type="password" className="form-control" placeholder="رمز عبور " aria-describedby="password"
                                 value={password} onChange={e => setPassword(e.target.value)} />
                         </div>
 

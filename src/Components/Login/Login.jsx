@@ -1,6 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { withRouter } from 'react-router';
+import { toast } from 'react-toastify';
+import { LoginUser } from '../../services/userServices';
 
-const Login = (props) => {
+const Login = ({ history }) => {
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleSubmit = async event => {
+        event.preventDefault();
+        const user = {
+            email, password
+        };
+
+        try {
+            const { status, data } = await LoginUser(user);
+            if (status === 200) {
+                toast.success('ورود موفقیت آمیز بود', {
+                    position: "top-center",
+                    closeOnClick: true
+                });
+                localStorage.setItem("token",data.token)
+                history.replace("/");
+            }
+        }
+        catch (ex) {
+            toast.error('اطلاعات وارد شده صحیح نمی باشد', { position: "top-center", closeOnClick: true });
+        }
+    }
     return (
         <main className="client-page">
             <div className="container-content">
@@ -9,16 +37,16 @@ const Login = (props) => {
 
                 <div className="form-layer">
 
-                    <form action="" method="">
+                    <form onSubmit={handleSubmit}>
 
                         <div className="input-group">
                             <span className="input-group-addon" id="email-address"><i className="zmdi zmdi-email"></i></span>
-                            <input type="text" className="form-control" placeholder="ایمیل" aria-describedby="email-address" />
+                            <input type="text" className="form-control" placeholder="ایمیل" aria-describedby="email-address" value={email} onChange={e=> setEmail(e.target.value)}/>
                         </div>
 
                         <div className="input-group">
                             <span className="input-group-addon" id="password"><i className="zmdi zmdi-lock"></i></span>
-                            <input type="text" className="form-control" placeholder="رمز عبور " aria-describedby="password" />
+                            <input type="text" className="form-control" placeholder="رمز عبور " aria-describedby="password" value={password} onChange={e=> setPassword(e.target.value)}/>
                         </div>
 
                         <div className="remember-me">
@@ -40,4 +68,4 @@ const Login = (props) => {
     );
 }
 
-export default Login;
+export default withRouter(Login);
