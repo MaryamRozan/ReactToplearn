@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Sugar } from 'react-preloaders';
+import helmet from 'react-helmet';
 import SimpleReactValidator from 'simple-react-validator';
 import { withRouter } from 'react-router';
 import { toast } from 'react-toastify';
@@ -59,7 +60,11 @@ const Login = ({ history }) => {
             <div className="container-content">
 
                 <header><h2> ورود به سایت </h2></header>
-
+            <Helmet>
+                <title>
+                    تاپلرن| ورود به سایت
+                </title>
+            </Helmet>
                 {preloaders ? (
                     <Sugar time={0} color="#2aaf27" custompreloading={preloaders} />
                 ) : null}

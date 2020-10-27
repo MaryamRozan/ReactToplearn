@@ -3,6 +3,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import { Sugar } from 'react-preloaders';
 import { toast } from 'react-toastify';
 import { RegisterUser } from '../../services/userServices';
+import { Helmet } from 'react-helmet';
 
 const Register = ({ history }) => {
     const [fullname, setFullname] = useState("");
@@ -73,6 +74,11 @@ const Register = ({ history }) => {
             <div className="container-content">
 
                 <header><h2> عضویت در سایت </h2></header>
+                <Helmet>
+                    <title>
+                        تاپلرن| ثبت نام در سایت
+                    </title>
+                </Helmet>
                 {
                     preloader ? (
                         <Sugar time={0} color="#2aaf27" custompreloading={preloader} />

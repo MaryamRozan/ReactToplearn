@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { Helmet } from 'react-helmet';
 import { withRouter } from 'react-router';
 import Footer from '../Common/Footer';
 import Header from '../Common/Header';
@@ -9,6 +10,11 @@ const MainLayout = (props) => {
     const {pathname}=props.location;
     return (
         <Fragment>
+            <Helmet>
+                <title>
+                    خودآموز تاپلرن
+                </title>
+            </Helmet>
             <div className="landing-layer">
                 <div className="container">
                     <TopNav />
