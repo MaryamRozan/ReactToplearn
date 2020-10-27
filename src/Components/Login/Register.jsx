@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useRef, useState } from 'react';
+import SimpleReactValidator from 'simple-react-validator';
 import { toast } from 'react-toastify';
 import { RegisterUser } from '../../services/userServices';
 
@@ -7,6 +7,17 @@ const Register = () => {
     const [fullname, setFullname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [policy,setPolicy]=useState();
+    const [, forceUpdate] = useState();
+    const validator = useRef(new SimpleReactValidator({
+        messages: {
+            required: "تکمیل این فیلد الزامی می باشد",
+            min: "مقدار این فیلد باید بیشتر از 5 کاراکتر باشد",
+            email: "ایمیل وارد شده معتبر نمی باشد"
+        },
+        element: message =>
+            <div style={{ color: "red" }}>{message}</div>
+    }));
 
 
     const handleSubmit = async event => {
@@ -18,13 +29,19 @@ const Register = () => {
         }
         console.log(user);
         try {
-            const { status } = await RegisterUser(user);
-            if (status === 201) {
-                toast.success("کاربر با موفقیت ایجاد شد.", {
-                    position: "top-center",
-                    closeOnClick: true
-                });
-                reset();
+            if (validator.current.allValid()) {
+                const { status } = await RegisterUser(user);
+                if (status === 201) {
+                    toast.success("کاربر با موفقیت ایجاد شد.", {
+                        position: "top-center",
+                        closeOnClick: true
+                    });
+                    reset();
+                }
+            }
+            else {
+                validator.current.showMessages();
+                forceUpdate(1);
             }
         }
 
@@ -58,23 +75,45 @@ const Register = () => {
                         <div className="input-group">
                             <span className="input-group-addon" id="username"><i className="zmdi zmdi-account"></i></span>
                             <input type="text" className="form-control" placeholder="نام و نام خانوادگی" aria-describedby="username"
-                                value={fullname} onChange={e => setFullname(e.target.value)} />
+                                name="fullname"
+                                value={fullname}
+                                onChange={e => {
+                                    setFullname(e.target.value);
+                                    validator.current.showMessageFor("fullname")
+                                }} />
+                            {validator.current.message("fullname", fullname, "required|min:5")}
                         </div>
 
                         <div className="input-group">
                             <span className="input-group-addon" id="email-address"><i className="zmdi zmdi-email"></i></span>
                             <input type="text" className="form-control" placeholder="ایمیل" aria-describedby="email-address"
-                                value={email} onChange={e => setEmail(e.target.value)} />
+                                name="email"
+                                value={email} onChange={e => {
+                                    setEmail(e.target.value);
+                                    validator.current.showMessageFor("email");
+                                }} />
+                            {validator.current.message("email", email, "required|email")}
                         </div>
 
                         <div className="input-group">
                             <span className="input-group-addon" id="password"><i className="zmdi zmdi-lock"></i></span>
                             <input type="password" className="form-control" placeholder="رمز عبور " aria-describedby="password"
-                                value={password} onChange={e => setPassword(e.target.value)} />
+                                name="password"
+                                value={password} onChange={e => {
+                                    setPassword(e.target.value);
+                                    validator.current.showMessageFor("password");
+                                }} />
+                            {validator.current.message("password", password, "required|min:5")}
                         </div>
 
                         <div className="accept-rules">
-                            <label><input type="checkbox" name="" />  قوانین و مقررات سایت را میپذیرم </label>
+                            <label><input type="checkbox" name="policy" value={policy} 
+                            onChange={e=>{
+                                setPolicy(e.currentTarget.checked);
+                                validator.current.showMessageFor("policy");
+                            }}
+                            />  قوانین و مقررات سایت را میپذیرم </label>
+                            {validator.current.message("policy",policy,"required")}
                         </div>
 
                         <div className="link">
