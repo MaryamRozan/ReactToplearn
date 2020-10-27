@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Sugar } from 'react-preloaders';
-import helmet from 'react-helmet';
+import Helmet from 'react-helmet';
 import SimpleReactValidator from 'simple-react-validator';
 import { withRouter } from 'react-router';
 import { toast } from 'react-toastify';
