@@ -1,14 +1,16 @@
 import React, { useRef, useState } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
+import { Sugar } from 'react-preloaders';
 import { toast } from 'react-toastify';
 import { RegisterUser } from '../../services/userServices';
 
-const Register = () => {
+const Register = ({ history }) => {
     const [fullname, setFullname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [policy,setPolicy]=useState();
+    const [policy, setPolicy] = useState();
     const [, forceUpdate] = useState();
+    const [preloader, setPreloader] = useState(false);
     const validator = useRef(new SimpleReactValidator({
         messages: {
             required: "تکمیل این فیلد الزامی می باشد",
@@ -30,13 +32,16 @@ const Register = () => {
         console.log(user);
         try {
             if (validator.current.allValid()) {
+                setPreloader(true);
                 const { status } = await RegisterUser(user);
                 if (status === 201) {
                     toast.success("کاربر با موفقیت ایجاد شد.", {
                         position: "top-center",
                         closeOnClick: true
                     });
+                    setPreloader(false);
                     reset();
+                    history.push("/login");
                 }
             }
             else {
@@ -50,6 +55,7 @@ const Register = () => {
                 position: "top-center",
                 closeOnClick: true
             });
+            setPreloader(false);
             console.log(ex);
 
         };
@@ -67,6 +73,11 @@ const Register = () => {
             <div className="container-content">
 
                 <header><h2> عضویت در سایت </h2></header>
+                {
+                    preloader ? (
+                        <Sugar time={0} color="#2aaf27" custompreloading={preloader} />
+                    ) : null
+                }
 
                 <div className="form-layer">
 
@@ -107,13 +118,13 @@ const Register = () => {
                         </div>
 
                         <div className="accept-rules">
-                            <label><input type="checkbox" name="policy" value={policy} 
-                            onChange={e=>{
-                                setPolicy(e.currentTarget.checked);
-                                validator.current.showMessageFor("policy");
-                            }}
+                            <label><input type="checkbox" name="policy" value={policy}
+                                onChange={e => {
+                                    setPolicy(e.currentTarget.checked);
+                                    validator.current.showMessageFor("policy");
+                                }}
                             />  قوانین و مقررات سایت را میپذیرم </label>
-                            {validator.current.message("policy",policy,"required")}
+                            {validator.current.message("policy", policy, "required")}
                         </div>
 
                         <div className="link">

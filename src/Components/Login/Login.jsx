@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { Sugar } from 'react-preloaders';
 import SimpleReactValidator from 'simple-react-validator';
 import { withRouter } from 'react-router';
 import { toast } from 'react-toastify';
@@ -8,18 +9,19 @@ const Login = ({ history }) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [preloaders, setPreloaders] = useState(false);
 
-    const [,forceUpdate]=useState();
-    const validator= useRef(new SimpleReactValidator({
-        messages:{
-            required:"تکمیل این فیلد الزامی می باشد",
-            min:"مقدار این فیلد باید بیشتر از 5 کاراکتر باشد",
-            email:"ایمیل وارد شده معتبر نمی باشد"
+    const [, forceUpdate] = useState();
+    const validator = useRef(new SimpleReactValidator({
+        messages: {
+            required: "تکمیل این فیلد الزامی می باشد",
+            min: "مقدار این فیلد باید بیشتر از 5 کاراکتر باشد",
+            email: "ایمیل وارد شده معتبر نمی باشد"
         },
-        element:message=>
-        <div style={{color:"red"}}>
-            {message}
-        </div>
+        element: message =>
+            <div style={{ color: "red" }}>
+                {message}
+            </div>
     }));
 
     const handleSubmit = async event => {
@@ -29,23 +31,26 @@ const Login = ({ history }) => {
         };
 
         try {
-           if(validator.current.allValid()){
-            const { status, data } = await LoginUser(user);
-            if (status === 200) {
-                toast.success('ورود موفقیت آمیز بود', {
-                    position: "top-center",
-                    closeOnClick: true
-                });
-                localStorage.setItem("token",data.token)
-                history.replace("/");
+            if (validator.current.allValid()) {
+                setPreloaders(true);
+                const { status, data } = await LoginUser(user);
+                if (status === 200) {
+                    toast.success('ورود موفقیت آمیز بود', {
+                        position: "top-center",
+                        closeOnClick: true
+                    });
+                    setPreloaders(false);
+                    localStorage.setItem("token", data.token)
+                    history.replace("/");
+                }
             }
-           }
-           else{
-               validator.current.showMessages();
-               forceUpdate(1);
-           }
+            else {
+                validator.current.showMessages();
+                forceUpdate(1);
+            }
         }
         catch (ex) {
+            setPreloaders(false);
             toast.error('اطلاعات وارد شده صحیح نمی باشد', { position: "top-center", closeOnClick: true });
         }
     }
@@ -55,28 +60,32 @@ const Login = ({ history }) => {
 
                 <header><h2> ورود به سایت </h2></header>
 
+                {preloaders ? (
+                    <Sugar time={0} color="#2aaf27" custompreloading={preloaders} />
+                ) : null}
+
                 <div className="form-layer">
 
                     <form onSubmit={handleSubmit}>
 
                         <div className="input-group">
                             <span className="input-group-addon" id="email-address"><i className="zmdi zmdi-email"></i></span>
-                            <input type="text" className="form-control" placeholder="ایمیل" aria-describedby="email-address" 
-                            name="email" value={email} onChange={e=> {
-                                setEmail(e.target.value);
-                                validator.current.showMessageFor("email");
-                            }}/>
-                            {validator.current.message("email",email,"required|email")}
+                            <input type="text" className="form-control" placeholder="ایمیل" aria-describedby="email-address"
+                                name="email" value={email} onChange={e => {
+                                    setEmail(e.target.value);
+                                    validator.current.showMessageFor("email");
+                                }} />
+                            {validator.current.message("email", email, "required|email")}
                         </div>
 
                         <div className="input-group">
                             <span className="input-group-addon" id="password"><i className="zmdi zmdi-lock"></i></span>
-                            <input type="text" className="form-control" placeholder="رمز عبور " aria-describedby="password"
-                            name="password" value={password} onChange={e=>{
-                                setPassword(e.target.value);
-                                validator.current.showMessageFor("password");
-                            }}/>
-                            {validator.current.message("password",password,"required|min:5")}
+                            <input type="password" className="form-control" placeholder="رمز عبور " aria-describedby="password"
+                                name="password" value={password} onChange={e => {
+                                    setPassword(e.target.value);
+                                    validator.current.showMessageFor("password");
+                                }} />
+                            {validator.current.message("password", password, "required|min:5")}
                         </div>
 
                         <div className="remember-me">
