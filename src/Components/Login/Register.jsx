@@ -79,11 +79,9 @@ const Register = ({ history }) => {
                         تاپلرن| ثبت نام در سایت
                     </title>
                 </Helmet>
-                {
-                    preloader ? (
-                        <Sugar time={0} color="#2aaf27" custompreloading={preloader} />
-                    ) : null
-                }
+              
+                        <Sugar time={0} color="#2aaf27" customLoading={preloader} />
+              
 
                 <div className="form-layer">
 

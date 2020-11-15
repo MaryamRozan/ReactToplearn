@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { Sugar } from 'react-preloaders';
-import Helmet from 'react-helmet';
 import SimpleReactValidator from 'simple-react-validator';
+import { Sugar } from 'react-preloaders';
 import { withRouter } from 'react-router';
-import { toast } from 'react-toastify';
 import { LoginUser } from '../../services/userServices';
+import { toast } from 'react-toastify';
+import Helmet from 'react-helmet';
 
 const Login = ({ history }) => {
 
@@ -65,9 +65,9 @@ const Login = ({ history }) => {
                     تاپلرن| ورود به سایت
                 </title>
             </Helmet>
-                {preloaders ? (
-                    <Sugar time={0} color="#2aaf27" custompreloading={preloaders} />
-                ) : null}
+             
+                    <Sugar time={0} color="#2aaf27" customLoading={preloaders} />
+              
 
                 <div className="form-layer">
 
