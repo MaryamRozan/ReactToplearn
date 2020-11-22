@@ -1,12 +1,10 @@
-import { act } from "react-dom/test-utils";
-
-export const userReducer=(state={},action)=>{
-    switch(action.type){
+export const userReducer = (state = {}, action) => {
+    switch (action.type) {
         case "SET_USER":
-            return {...action.payload};
-        case "CLEARE_USER":
-            return {...action.payload};    
+            return { ...action.payload }; //spread Operator
+        case "CLEAR_USER":
+            return { ...action.payload };
         default:
-            return state;    
+            return state;
     }
-}
+};

@@ -1,72 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import { Sugar } from 'react-preloaders';
 import { toast } from 'react-toastify';
-import { RegisterUser } from '../../services/userServices';
+import { RegisterUser } from '../../services/userService';
 import { Helmet } from 'react-helmet';
+import { isEmpty } from 'lodash';
+import { Redirect } from 'react-router';
+import { useSelector } from 'react-redux';
+import { Context } from '../Context/Context';
 
 const Register = ({ history }) => {
-    const [fullname, setFullname] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [policy, setPolicy] = useState();
-    const [, forceUpdate] = useState();
-    const [preloader, setPreloader] = useState(false);
-    const validator = useRef(new SimpleReactValidator({
-        messages: {
-            required: "تکمیل این فیلد الزامی می باشد",
-            min: "مقدار این فیلد باید بیشتر از 5 کاراکتر باشد",
-            email: "ایمیل وارد شده معتبر نمی باشد"
-        },
-        element: message =>
-            <div style={{ color: "red" }}>{message}</div>
-    }));
-
-
-    const handleSubmit = async event => {
-        event.preventDefault();
-        const user = {
-            fullname,
-            email,
-            password
-        }
-        console.log(user);
-        try {
-            if (validator.current.allValid()) {
-                setPreloader(true);
-                const { status } = await RegisterUser(user);
-                if (status === 201) {
-                    toast.success("کاربر با موفقیت ایجاد شد.", {
-                        position: "top-center",
-                        closeOnClick: true
-                    });
-                    setPreloader(false);
-                    reset();
-                    history.push("/login");
-                }
-            }
-            else {
-                validator.current.showMessages();
-                forceUpdate(1);
-            }
-        }
-
-        catch (ex) {
-            toast.error("مشکلی پیش آمده.", {
-                position: "top-center",
-                closeOnClick: true
-            });
-            setPreloader(false);
-            console.log(ex);
-
-        };
-    }
-
-    const reset = () => {
-        setFullname("");
-        setEmail("");
-        setPassword("");
-    }
+   const RegisterContext = useContext(Context);
+   const {fullname,setFullname,email,setEmail,password,setPassword,policy,setPolicy,validator,handleRegister}=RegisterContext;
 
 
     return (
@@ -80,12 +25,11 @@ const Register = ({ history }) => {
                     </title>
                 </Helmet>
               
-                        <Sugar time={0} color="#2aaf27" customLoading={preloader} />
               
 
                 <div className="form-layer">
 
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={e=>handleRegister(e)}>
 
                         <div className="input-group">
                             <span className="input-group-addon" id="username"><i className="zmdi zmdi-account"></i></span>

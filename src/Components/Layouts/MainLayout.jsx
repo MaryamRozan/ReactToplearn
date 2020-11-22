@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
+import  LoadingBar  from 'react-redux-loading-bar';
 import { withRouter } from 'react-router';
 import Footer from '../Common/Footer';
 import Header from '../Common/Header';
@@ -16,6 +17,7 @@ const MainLayout = (props) => {
                 </title>
             </Helmet>
             <div className="landing-layer">
+                <LoadingBar style={{backgroundColor:"lime",height:"5px"}}/>
                 <div className="container">
                     <TopNav />
                    {pathname==="/"?  <Header />:null}
