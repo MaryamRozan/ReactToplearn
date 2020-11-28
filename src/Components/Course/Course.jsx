@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import config from '../../services/config.json';
+import ShowImage from '../Common/ShowImage';
 const Course = ({courses}) => {
 
     return (
@@ -14,7 +15,10 @@ const Course = ({courses}) => {
            {courses.map(course=>(
                 <div key={course._id} className="col-lg-3 col-md-4 col-sm-6 col-xs-12 term-col">
                 <article>
-                    <Link to={`/course/${course._id}`} className="img-layer"><img  style={{maxHeight:"110px"}} src={`${config.toplearnapi}/${course.imageUrl}`}/></Link>
+                    <Link to={`/course/${course._id}`} className="img-layer">
+                      
+                        <ShowImage style={{maxHeight:"110px"}} image={course.imageUrl}/>
+                        </Link>
                     <h2><Link to={`/course/${course._id}`}>{course.title} </Link></h2>
                     <span> {course.price} </span>
                     <i>1:52:32</i>

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {getSingleCourse} from '../../actions/course';
 import config from '../../services/config.json';
+import ShowImage from '../Common/ShowImage';
 
 const Single = ({match}) => {
     const course = useSelector(state => state.course);
@@ -20,9 +21,8 @@ const Single = ({match}) => {
 
             <div className="col-md-8 col-sm-12 col-xs-12 pull-left">
                 <section className="term-description">
-                    <img src={`${config.toplearnapi}/${course.imageUrl}`}/>
-
-                 
+                   
+                    <ShowImage style={{maxHeight:"1110px"}} image={course.imageUrl}/>                 
                     <p>
                     {course.info} 
                     </p>
