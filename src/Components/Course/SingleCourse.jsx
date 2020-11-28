@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router';
 import {getSingleCourse} from '../../actions/course';
 import config from '../../services/config.json';
+import { courseIdValidator } from '../../utils/IdValidator';
 import ShowImage from '../Common/ShowImage';
 
 const Single = ({match}) => {
@@ -9,11 +11,11 @@ const Single = ({match}) => {
     const dispatch = useDispatch();
    
     useEffect(() => {
-        dispatch(getSingleCourse(match.params.id));
+        if(courseIdValidator(match.params.id)) dispatch(getSingleCourse(match.params.id));
         console.log(match);
     }, []);
 
-    
+   if(!courseIdValidator(match.params.id)) return <Redirect to="/404"/>
     return (
         <section className="term-content">
         <header><h1>{course.title} </h1></header>

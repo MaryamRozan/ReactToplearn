@@ -8,6 +8,7 @@ import MainLayout from '../Components/Layouts/MainLayout';
 import Account from '../Components/Login/Account';
 import Login from '../Components/Login/Login';
 import Register from '../Components/Login/Register';
+import NotFound from '../Components/Common/NotFound'
 import { paginate } from '../utils/paginate';
 
 import { addUser, clearUser } from '../actions/user';
@@ -64,8 +65,10 @@ const Toplearn = () => {
                 <Route
                     path="/"
                     exact
-                    render={() => <Course courses={indexCourses} />}
+                    render={() => <Course courses={indexCourses} />
+                }
                 />
+                <Route path="*" exact component={NotFound} />
             </Switch>
         </MainLayout>
     );
